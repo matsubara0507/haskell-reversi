@@ -137,7 +137,8 @@ getMove board piece ps =
 -- | 合法な Move のリストを返す
 --   盤面の左上から右下まで走査して、合法手を探し出す
 moves :: Piece -> Board -> [Move]
-moves piece board = undefined
+moves piece board =
+  [ mov | x <- [1..size], y <- [1..size], let mov = getMove board piece (x, y), isLegal mov ]
 
 -- | 石を指定の位置から指定の方向へ指定の数だけ指定の色にひっくり返す
 --   ひっくり返した分だけ `black`/`white` の数を増減させる必要がある
