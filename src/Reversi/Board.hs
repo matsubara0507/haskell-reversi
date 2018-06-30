@@ -83,7 +83,7 @@ hasCoord (x, y) = 0 < x && x <= size && 0 < y && y <= size
      参照: https://hackage.haskell.org/package/matrix/docs/Data-Matrix.html
 -}
 (!!!) :: Matrix (Maybe Piece) -> Coord -> Maybe Piece
-mat !!! (x, y) = undefined
+mat !!! (x, y) = if hasCoord (x, y) then mat ! (y, x) else Nothing
 
 
 -- | 隣接する8マスを指すそれぞれのベクトル
