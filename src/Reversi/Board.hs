@@ -115,7 +115,14 @@ getFlip
   -> Coord -- ^ 石を置く座標
   -> Coord -- ^ ひっくり返す石を探す方向
   -> Int   -- ^ ひっくり返せる石の数
-getFlip board piece ps dir = undefined
+getFlip board piece ps dir = fromMaybe 0 $ go (ps |+| dir)
+  where
+    go target
+      | mov == Just (opponent piece) = (1 +) <$> go (target |+| dir)
+      | mov == Just piece            = Just 0
+      | otherwise                    = Nothing
+      where
+        mov = matrix board !!! target
 
 -- | 指定の色の石を指定の位置に置いたときの「手」を返す
 --   戻り値の `Move` には8方向分の `get_flip` の結果が含まれる
