@@ -127,7 +127,12 @@ getFlip board piece ps dir = fromMaybe 0 $ go (ps |+| dir)
 -- | 指定の色の石を指定の位置に置いたときの「手」を返す
 --   戻り値の `Move` には8方向分の `get_flip` の結果が含まれる
 getMove :: Board -> Piece -> Coord -> Move
-getMove board piece ps = undefined
+getMove board piece ps =
+  Move ps $
+    if hasCoord ps && isNothing (matrix board !!! ps) then
+      map (getFlip board piece ps) directions
+    else
+      zeroFlips
 
 -- | 合法な Move のリストを返す
 --   盤面の左上から右下まで走査して、合法手を探し出す
