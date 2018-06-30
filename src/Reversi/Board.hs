@@ -162,7 +162,12 @@ updateBoard (addBn, addWn) piece (x, y) (Board mat bn wn) =
 
 -- | 指定の色で指定の「手」を打つ
 doMove :: Piece -> Move -> Board -> Board
-doMove piece (Move ps ns) board = undefined
+doMove piece (Move ps ns) board =
+  foldr ($) board' $ zipWith (doFlip piece ps) directions ns
+  where
+    board' = case piece of
+      Black -> updateBoard (1, 0) piece ps board
+      White -> updateBoard (0, 1) piece ps board
 
 -- | 盤面をいい感じに出力するための関数
 prityprint :: Board -> String
