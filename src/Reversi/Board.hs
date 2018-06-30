@@ -149,7 +149,16 @@ doFlip
   -> Int   -- ^ ひっくり返す枚数
   -> Board -- ^ ひっくり返す前の盤面
   -> Board -- ^ ひっくり返した後の盤面
-doFlip piece ps dir flipNum board = undefined
+doFlip piece ps dir = go (ps |+| dir)
+  where
+    go _ 0 board = board
+    go p n board = go (p |+| dir) (n - 1) (oneFlip piece p board)
+    oneFlip Black = updateBoard (1, -1) Black
+    oneFlip White = updateBoard (-1, 1) White
+
+updateBoard :: (Int, Int) -> Piece ->  Coord -> Board -> Board
+updateBoard (addBn, addWn) piece (x, y) (Board mat bn wn) =
+  Board (Matrix.setElem (Just piece) (y, x) mat) (bn + addBn) (wn + addWn)
 
 -- | 指定の色で指定の「手」を打つ
 doMove :: Piece -> Move -> Board -> Board
